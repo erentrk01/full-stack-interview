@@ -1,14 +1,12 @@
 version: '3.8'
+
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    ports:
-      - "4317:4317"
-    command: ["--config=/etc/otel-collector-config.yaml"]
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
     volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-
-  clickhouse:
-    image: yandex/clickhouse-server:latest
+      - ./otel-collector-config.yml:/otel-local-config.yml
+    command: ["--config", "/otel-local-config.yml"]
     ports:
-      - "8123:8123"
+      - "55680:55680"  # OTLP HTTP
+      - "55681:55681"  # OTLP gRPC
