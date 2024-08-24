@@ -1,32 +1,41 @@
+
 services:
   dashboard:
-    build: ./apps/dashboard-app
+    build:
+      context: ./apps/dashboard-app
     ports:
       - "3000:3000"
 
   service1:
-    build: ./apps/microservice-based-system/service1
+    build:
+      context: ./apps/microservice-based-system/service1
     ports:
       - "3001:3001"
     depends_on:
       - otel-collector
 
   service2:
-    build: ./apps/microservice-based-system/service2
+    build:
+      context: ./apps/microservice-based-system/service2
     ports:
       - "3002:3002"
     depends_on:
       - otel-collector
 
   service3:
-    build: ./apps/microservice-based-system/service3
+    build:
+      context: ./apps/microservice-based-system/service3
     ports:
       - "3003:3003"
     depends_on:
       - otel-collector
 
   otel-collector:
-    build: ./opentelemetry
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    volumes:
+      - ./opentelemetry/otel-collector-config.yaml:/otel-local-config.yaml
+    command: ["--config", "/otel-local-config.yaml"]
     ports:
       - "4317:4317"
     depends_on:
