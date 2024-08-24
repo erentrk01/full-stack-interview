@@ -1,26 +1,26 @@
 version: '3.8'
 services:
   dashboard:
-    build: ./apps/dashboard
+    build: ./apps/dashboard-app
     ports:
       - "3000:3000"
 
-  service-a:
-    build: ./apps/service-a
+  service1:
+    build: ./apps/microservice-based-system/service1
     ports:
       - "3001:3001"
     depends_on:
       - otel-collector
 
-  service-b:
-    build: ./apps/service-b
+  service2:
+    build: ./apps/microservice-based-system/service2
     ports:
       - "3002:3002"
     depends_on:
       - otel-collector
 
-  service-c:
-    build: ./apps/service-c
+  service3:
+    build: ./apps/microservice-based-system/service3
     ports:
       - "3003:3003"
     depends_on:
