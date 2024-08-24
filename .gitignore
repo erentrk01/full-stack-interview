@@ -1,0 +1,91 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Binaries
+*.exe
+*.out
+*.app
+*.dmg
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Compiled output
+dist/
+build/
+.cache/
+.next/
+
+# Parcel-bundler cache
+.cache/
+
+# Next.js files
+.next/
+out/
+
+# Storybook files
+.storybook/
+
+# Production
+dist/
+build/
+
+# Coverage directories
+coverage/
+
+# VSCode directory and settings files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Optional NPM/Yarn cache directory
+.npm/
+.yarn/
+
+# Debugging file
+debug.log
+
+# Local environments
+.local/
+.tmp/
+
+# TypeScript specific
+*.tsbuildinfo
+*.tsbuildcache/
+
+# CI/CD related
+.nyc_output/
+coverage/
