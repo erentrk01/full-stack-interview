@@ -6,8 +6,8 @@ const PROTO_PATH = './service.proto';
 const packageDefinition = protoLoader.loadSync(PROTO_PATH);
 const serviceProto = grpc.loadPackageDefinition(packageDefinition).myservice;
 
-const client1 = new serviceProto.MyService('localhost:50051', grpc.credentials.createInsecure());
-const client2 = new serviceProto.MyService('localhost:50052', grpc.credentials.createInsecure());
+const client1 = new serviceProto.MyService('localhost:3001', grpc.credentials.createInsecure());
+const client2 = new serviceProto.MyService('localhost:3002', grpc.credentials.createInsecure());
 
 const server = new grpc.Server();
 
@@ -32,8 +32,8 @@ server.addService(serviceProto.MyService.service, {
   }
 });
 
-server.bindAsync('127.0.0.1:50053', grpc.ServerCredentials.createInsecure(), () => {
-  console.log('Service 3 running on port 50053');
+server.bindAsync('127.0.0.1:3003', grpc.ServerCredentials.createInsecure(), () => {
+  console.log('Service 3 running on port 3003');
   server.start();
 });
 

@@ -15,8 +15,8 @@ server.addService(serviceProto.MyService.service, {
   }
 });
 
-server.bindAsync('127.0.0.1:50051', grpc.ServerCredentials.createInsecure(), () => {
-  console.log('Service 1 running on port 50051');
+server.bindAsync('127.0.0.1:3001', grpc.ServerCredentials.createInsecure(), () => {
+  console.log('Service 1 running on port 3001');
   server.start();
 });
 

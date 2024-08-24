@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   otel-collector:
     image: otel/opentelemetry-collector:latest
     container_name: otel-collector
     volumes:
-      - ./otel-collector-config.yml:/otel-local-config.yml
-    command: ["--config", "/otel-local-config.yml"]
+      - ./otel-collector-config.yaml:/otel-local-config.yaml
+    command: ["--config", "/otel-local-config.yaml"]
     ports:
       - "55680:55680"  # OTLP HTTP
       - "55681:55681"  # OTLP gRPC
