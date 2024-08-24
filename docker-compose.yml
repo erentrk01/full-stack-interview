@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  dashboard:
+    build: ./apps/dashboard
+    ports:
+      - "3000:3000"
+
+  service-a:
+    build: ./apps/service-a
+    ports:
+      - "3001:3001"
+    depends_on:
+      - otel-collector
+
+  service-b:
+    build: ./apps/service-b
+    ports:
+      - "3002:3002"
+    depends_on:
+      - otel-collector
+
+  service-c:
+    build: ./apps/service-c
+    ports:
+      - "3003:3003"
+    depends_on:
+      - otel-collector
+
+  otel-collector:
+    build: ./opentelemetry
+    ports:
+      - "4317:4317"
+    depends_on:
+      - clickhouse
+
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    ports:
+      - "8123:8123"

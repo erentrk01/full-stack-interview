@@ -1,0 +1,17 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  clickhouse:
+    endpoint: "http://clickhouse:8123"
+    database: "default"
+    username: "default"
+    password: ""
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [clickhouse]
