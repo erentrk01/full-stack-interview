@@ -1,27 +1,49 @@
+const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
+const path = require('path');
 const { register } = require('infrastack-sdk');
 
-const PROTO_PATH = './service.proto';
-const packageDefinition = protoLoader.loadSync(PROTO_PATH);
+// Path to your .proto file
+const PROTO_PATH = path.join(__dirname, './service.proto');
+
+// Load the proto file
+const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true
+});
 const serviceProto = grpc.loadPackageDefinition(packageDefinition).myservice;
 
-const server = new grpc.Server();
+// Implement the GetData RPC method
+function GetData(call, callback) {
+  // Add tracing here if needed
+  callback(null, { message: `Service 1 received: ${call.request.data}` });
+}
 
-server.addService(serviceProto.MyService.service, {
-  GetData: (call, callback) => {
-    callback(null, { message: `Service 1 received: ${call.request.data}` });
-  },
-  SendData: (call, callback) => {
-    callback(null, { message: `Service 1 processed: ${call.request.data}` });
-  }
-});
+// Implement the SendData RPC method
+function SendData(call, callback) {
+  // Add tracing here if needed
+  callback(null, { message: `Service 1 processed: ${call.request.data}` });
+}
 
-server.bindAsync('127.0.0.1:3001', grpc.ServerCredentials.createInsecure(), () => {
-  console.log('Service 1 running on port 3001');
-  server.start();
-});
+// Start the gRPC server
+function main() {
+  const server = new grpc.Server();
+  server.addService(serviceProto.MyService.service, { GetData, SendData });
 
-register({
-    endpoint: 'https://cecqr19ofk.eu-central-1.aws.clickhouse.cloud:8443', 
+  // Register OpenTelemetry with infrastack-sdk
+  register({
+    endpoint: '0.0.0.1:4317', 
     serviceName: 'service1',
     serviceVersion: '1.0.0',
   });
+
+  server.bindAsync('0.0.0.0:3001', grpc.ServerCredentials.createInsecure(), () => {
+    console.log('Service 1 running on port 3001');
+ 
+  });
+}
+
+main();

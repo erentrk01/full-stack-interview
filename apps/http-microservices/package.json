@@ -1,7 +1,7 @@
 {
-  "name": "service3",
+  "name": "http-microservices",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "service1.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@grpc/grpc-js": "^1.11.1",
-    "@grpc/proto-loader": "^0.7.13",
-    "infrastack-sdk": "^1.0.4"
+    "axios": "^1.7.5",
+    "express": "^4.19.2",
+    "infrastack-sdk": "^1.0.7"
   }
 }

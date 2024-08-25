@@ -2,26 +2,28 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
+        endpoint: 0.0.0.0:55681
 
 processors:
   batch:
     timeout: 5s
-    send_batch_size: 100000
+    send_batch_size: 1000
 
 exporters:
-  clickhouse:  
-    endpoint: https://cecqr19ofk.eu-central-1.aws.clickhouse.cloud:8443
-    username: default
-    password: jqR~8drmm3_gA
+  clickhouse:
+    endpoint: tcp://cecqr19ofk.eu-central-1.aws.clickhouse.cloud:8443
     database: default
+    username: default
+    password: zRTk1wENnNC~o
     async_insert: true
     ttl: 72h
     compress: lz4
-    create_schema: true
-    logs_table_name: otel_logs
-    traces_table_name: otel_traces
-    metrics_table_name: otel_metrics
+    create_schema: false
+    logs_table_name: infrastack_logs
+    traces_table_name: infrastack_traces
+    metrics_table_name: infrastack_metrics
     timeout: 5s
     retry_on_failure:
       enabled: true

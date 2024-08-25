@@ -32,9 +32,9 @@ server.addService(serviceProto.MyService.service, {
   }
 });
 
-server.bindAsync('127.0.0.1:3003', grpc.ServerCredentials.createInsecure(), () => {
+server.bindAsync('0.0.0.0:3003', grpc.ServerCredentials.createInsecure(), () => {
   console.log('Service 3 running on port 3003');
-  server.start();
+  
 });
 
 register({

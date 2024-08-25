@@ -1,0 +1,20 @@
+# config file version
+apiVersion: 1
+
+datasources:
+  - name: ClickHouse-official
+    type: grafana-clickhouse-datasource
+    jsonData:
+      defaultDatabase: otel
+      port: 9000
+      server: clickhouse
+      protocol: native
+      username: default
+      tlsSkipVerify: true
+    secureJsonData:
+        password: OewqdNp7v~NYc
+  - name: ClickHouse-vertamedia
+    type: vertamedia-clickhouse-datasource
+    url: https://cecqr19ofk.eu-central-1.aws.clickhouse.cloud:8443
+
+     

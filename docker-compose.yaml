@@ -1,4 +1,3 @@
-
 services:
   dashboard:
     build:
@@ -11,37 +10,35 @@ services:
       context: ./apps/microservice-based-system/service1
     ports:
       - "3001:3001"
-    depends_on:
-      - otel-collector
 
   service2:
     build:
       context: ./apps/microservice-based-system/service2
     ports:
       - "3002:3002"
-    depends_on:
-      - otel-collector
 
   service3:
     build:
       context: ./apps/microservice-based-system/service3
     ports:
       - "3003:3003"
-    depends_on:
-      - otel-collector
 
   otel-collector:
-    image: otel/opentelemetry-collector:latest
-    container_name: otel-collector
+    image: chainguard/opentelemetry-collector-contrib:latest
     volumes:
       - ./opentelemetry/otel-collector-config.yaml:/otel-local-config.yaml
     command: ["--config", "/otel-local-config.yaml"]
     ports:
-      - "4317:4317"
+      - "4317:4317"  # gRPC
+      - "55681:55681"  # HTTP
     depends_on:
       - clickhouse
 
   clickhouse:
-    image: yandex/clickhouse-server:latest
+    image: clickhouse/clickhouse-server
     ports:
+      - "9000:9000"
       - "8123:8123"
+ 
+
+     

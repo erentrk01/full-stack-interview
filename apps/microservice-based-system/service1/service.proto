@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package myservice;
+
+service MyService {
+  rpc GetData (Request) returns (Response);
+  rpc SendData (Request) returns (Response);
+}
+
+message Request {
+  string data = 1;
+}
+
+message Response {
+  string message = 1;
+}

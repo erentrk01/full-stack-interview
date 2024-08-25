@@ -7,11 +7,15 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
+COPY service.proto /usr/src/app/
+
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+
+
 
 # Expose the port the service will run on
 EXPOSE 3003

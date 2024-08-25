@@ -7,9 +7,10 @@ async function sendTrace() {
 
         // Register tracing with infrastack-sdk
         await register({
-            endpoint: 'https://cecqr19ofk.eu-central-1.aws.clickhouse.cloud:8443',
+            endpoint: '',
             serviceName: 'test-service',
             serviceVersion: '1.0.0',
+            instruments: ['http'] 
         });
 
         console.log("Tracing registered successfully. Sending test trace...");
@@ -34,11 +35,11 @@ async function verifyDataInClickHouse() {
 
         // Connect to ClickHouse
         const clickhouse = new ClickHouse({
-            url: 'https://cecqr19ofk.eu-central-1.aws.clickhouse.cloud',
-            port: 8443,
+            url: 'http://localhost:8123',
+            port: 8123,
             basicAuth: {
                 username: 'default', 
-                password: 'secret ', 
+                password: 'zRTk1wENnNC~o', 
             },
             debug: false,
             isUseGzip: true,
