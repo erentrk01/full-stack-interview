@@ -1,46 +1,47 @@
-require('dotenv').config();
-
-const process = require('process');
-const opentelemetry = require('@opentelemetry/sdk-node');
+const { NodeSDK } = require('@opentelemetry/sdk-node');
 const {
   getNodeAutoInstrumentations,
 } = require('@opentelemetry/auto-instrumentations-node');
 const {
-  OTLPTraceExporter,
-} = require('@opentelemetry/exporter-trace-otlp-grpc');
-const { Resource } = require('@opentelemetry/resources');
+  PeriodicExportingMetricReader,
+  ConsoleMetricExporter,
+} = require('@opentelemetry/sdk-metrics');
 const {
-  SemanticResourceAttributes,
-} = require('@opentelemetry/semantic-conventions');
+    OTLPTraceExporter,
+  } = require('@opentelemetry/exporter-trace-otlp-grpc');
+const { Resource } = require('@opentelemetry/resources');
+const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
+
 
 function register({ endpoint, instruments = [], serviceName, serviceVersion }) {
-  const exporterOptions = {
-    url: `${endpoint}/v1/traces`,
-    headers: { 'infrastack-api-key': process.env.OTEL_EXPORTER_OTLP_HEADERS.split('=')[1] },
-    compression: 'gzip',
-  };
 
-  const traceExporter = new OTLPTraceExporter(exporterOptions);
+    const exporterOptions = {
+        url: `${endpoint}/v1/traces`,
+        compression: 'gzip',
+      };
+    const sdk = new NodeSDK({
+        traceExporter:   new OTLPTraceExporter(exporterOptions),
+        metricReader: new PeriodicExportingMetricReader({
+          exporter: new ConsoleMetricExporter(),
+        }),
+        resource: new Resource({
+          [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
+          [SemanticResourceAttributes.SERVICE_VERSION]: serviceVersion,
+        }),
+        instrumentations: [getNodeAutoInstrumentations({ instruments })],
+      });
+      
+      sdk.start();
 
-  const sdk = new opentelemetry.NodeSDK({
-    traceExporter,
-    instrumentations: [getNodeAutoInstrumentations({ instrumentations })],
-    resource: new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: serviceName || 'default-service',
-      [SemanticResourceAttributes.SERVICE_VERSION]: serviceVersion || '1.0.0',
-      [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: process.env.POD_NAME ?? `uuidgen`,
-    }),
-  });
-
-  sdk.start();
-
-  process.on('SIGTERM', () => {
-    sdk
-      .shutdown()
-      .then(() => console.log('Tracing terminated'))
-      .catch((error) => console.log('Error terminating tracing', error))
-      .finally(() => process.exit(0));
-  });
-}
-
-module.exports = { register };
+  
+    process.on('SIGTERM', () => {
+      sdk
+        .shutdown()
+        .then(() => console.log('Tracing terminated'))
+        .catch((error) => console.log('Error terminating tracing', error))
+        .finally(() => process.exit(0));
+    });
+  }
+  
+  module.exports = { register };
+  
